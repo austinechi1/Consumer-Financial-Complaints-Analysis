@@ -1,0 +1,28 @@
+# Large source datasets
+cfpb_complaints_2023_2025_clean.csv
+data/raw/*.csv
+data/raw/*.zip
+data/raw/*.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Streamlit and local secrets
+.streamlit/secrets.toml
+.env
+*.env
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.log
+*.tmp
+~$*

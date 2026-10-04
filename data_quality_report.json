@@ -1,0 +1,31 @@
+{
+  "output_file": "cfpb_complaints_2023_2025_clean.csv",
+  "rows_written": 490639,
+  "unique_complaint_ids": 490639,
+  "duplicate_rows_removed": 0,
+  "invalid_rows_skipped": 0,
+  "date_min": "2023-01-01",
+  "date_max": "2025-12-31",
+  "rows_by_year": {
+    "2023": 107392,
+    "2024": 163608,
+    "2025": 219639
+  },
+  "rows_by_product": {
+    "Checking or savings account": 186889,
+    "Credit card": 187839,
+    "Mortgage": 68988,
+    "Vehicle loan or lease": 46923
+  },
+  "rows_by_source_file": {
+    "csv_files/cfpb_2023_checking_mortgage.csv": 72726,
+    "csv_files/cfpb_2023_credit_vehicle.csv": 34666,
+    "csv_files/cfpb_2024_checking_mortgage.csv": 74259,
+    "csv_files/cfpb_2024_credit_vehicle.csv": 89349,
+    "csv_files/cfpb_2025_checking.csv": 84195,
+    "csv_files/cfpb_2025_credit_card.csv": 89978,
+    "csv_files/cfpb_2025_mortgage.csv": 24697,
+    "csv_files/cfpb_2025_vehicle_loan.csv": 20769
+  },
+  "blank_values_by_column": {}
+}
