@@ -5,11 +5,11 @@
 
 -- 1. Check blank strings in key categorical fields.
 SELECT
-    COUNT(*) FILTER (WHERE TRIM(product) = '') AS blank_product,
-    COUNT(*) FILTER (WHERE TRIM(company) = '') AS blank_company,
-    COUNT(*) FILTER (WHERE TRIM(issue) = '') AS blank_issue,
-    COUNT(*) FILTER (WHERE TRIM(state) = '') AS blank_state,
-    COUNT(*) FILTER (WHERE TRIM(timely_response) = '') AS blank_timely_response
+    COUNT(*) FILTER (WHERE product IS NULL OR TRIM(product) = '') AS blank_product,
+    COUNT(*) FILTER (WHERE company IS NULL OR TRIM(company) = '') AS blank_company,
+    COUNT(*) FILTER (WHERE issue IS NULL OR TRIM(issue) = '') AS blank_issue,
+    COUNT(*) FILTER (WHERE state IS NULL OR TRIM(state) = '') AS blank_state,
+    COUNT(*) FILTER (WHERE timely_response IS NULL OR TRIM(timely_response) = '') AS blank_timely_response
 FROM complaints;
 
 -- 2. Check dates and derived elapsed-day values for inconsistencies.
@@ -17,9 +17,11 @@ SELECT
     COUNT(*) FILTER (WHERE date_sent_to_company < date_received)
         AS sent_before_received,
     COUNT(*) FILTER (
-        WHERE date_sent_to_company IS NOT NULL
-          AND days_to_send_to_company IS DISTINCT FROM
-              (date_sent_to_company - date_received)
+        WHERE days_to_send_to_company IS DISTINCT FROM
+              CASE WHEN date_sent_to_company IS NOT NULL
+                   THEN (date_sent_to_company - date_received)
+                   ELSE NULL
+              END
     ) AS elapsed_days_mismatch,
     COUNT(*) FILTER (
         WHERE received_year <> EXTRACT(YEAR FROM date_received)::INTEGER
