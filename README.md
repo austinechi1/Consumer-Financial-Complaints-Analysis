@@ -99,7 +99,15 @@ The Python workflow:
 8. Validates row counts, date coverage, and complaint-ID uniqueness.
 9. Exports a PostgreSQL-ready analytical dataset.
 
-Data-quality checks are retained as a separate project artifact rather than hidden inside the analysis.
+Data-quality checks are retained as separate project artifacts rather than hidden inside the analysis.
+
+**Evidence and reproducibility**
+- [Cleaning script](combine_clean_cfpb.py) — inspect the row-handling and transformation rules.
+- [Recorded data-quality report](data_quality_report.json) — see the counts recorded for the committed run.
+- [Data-quality methodology](docs/data_quality_methodology.md) — review cleaning decisions, reproduction steps and known limitations.
+- [Initial SQL checks](sql/03_data_quality_checks.sql) and [extended SQL checks](sql/06_extended_data_quality_checks.sql) — run checks for blanks, date consistency, derived fields, response categories and total reconciliation.
+
+The JSON report records a run; it is not a guarantee that future source extracts will produce identical results. The cleaning script currently skips a row if either received or sent-to-company date cannot be parsed. The methodology document explains this behavior and other reproducibility considerations.
 
 ## SQL Analysis
 
@@ -139,6 +147,15 @@ Streamlit provides filters and navigation, while Plotly provides interactive vis
 - **California** recorded the largest state-level complaint volume in the dashboard dataset.
 
 These findings describe patterns in submitted complaints; they should not be interpreted as proof of company wrongdoing.
+
+**How to inspect the evidence**
+- [Year-over-year growth and product share](sql/05_business_analysis.sql) — business questions 1–2.
+- [Issue rankings and response performance](sql/05_business_analysis.sql) — business questions 3–5.
+- [Monthly trend and three-month moving average](sql/05_business_analysis.sql) — business question 7.
+- [January 2025 spike breakdown](sql/05_business_analysis.sql) — business question 9.
+- [Data cleaning and validation notes](docs/data_quality_methodology.md) — explains how to rerun the checks and interpret their results.
+
+For the January 2025 change, the comparison from 14,524 complaints in December 2024 to 31,564 in January 2025 is approximately a 117.3% increase. This is a descriptive month-to-month change, not proof of a specific cause. The product/issue breakdown helps identify where the increase appears; additional investigation would be needed to establish why.
 
 ## Dashboard
 
