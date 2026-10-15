@@ -91,13 +91,12 @@ The Python workflow:
 
 1. Combines multiple CFPB extracts.
 2. Standardizes column names using `snake_case`.
-3. Converts date fields into consistent formats.
-4. Adds year, month number, month label, and year-month fields.
-5. Removes duplicate complaint IDs.
-6. Standardizes blank and missing values.
-7. Cleans state and categorical values.
-8. Validates row counts, date coverage, and complaint-ID uniqueness.
-9. Exports a PostgreSQL-ready analytical dataset.
+3. Requires a parseable received date and derives year, month number, month label, and year-month fields.
+4. Retains valid complaints when the sent-to-company date is missing or malformed, leaving the sent date and elapsed days blank.
+5. Removes duplicate complaint IDs, keeping the first valid occurrence in sorted input-file order.
+6. Reports missing/invalid sent dates and sent-before-received cases separately.
+7. Standardizes whitespace and tracks blank values by column.
+8. Exports the cleaned dataset and a JSON quality report.
 
 Data-quality checks are retained as separate project artifacts rather than hidden inside the analysis.
 
@@ -107,7 +106,7 @@ Data-quality checks are retained as separate project artifacts rather than hidde
 - [Data-quality methodology](docs/data_quality_methodology.md) — review cleaning decisions, reproduction steps and known limitations.
 - [Initial SQL checks](sql/03_data_quality_checks.sql) and [extended SQL checks](sql/06_extended_data_quality_checks.sql) — run checks for blanks, date consistency, derived fields, response categories and total reconciliation.
 
-The JSON report records a run; it is not a guarantee that future source extracts will produce identical results. The cleaning script currently skips a row if either received or sent-to-company date cannot be parsed. The methodology document explains this behavior and other reproducibility considerations.
+The JSON report records a run; it is not a guarantee that future source extracts will produce identical results. The cleaning script now skips rows only when the complaint ID is missing or the received date cannot be parsed. It retains complaints with missing or malformed sent-to-company dates and records those cases in the quality report. See the methodology and regression tests for the exact rules.
 
 ## SQL Analysis
 
@@ -154,6 +153,7 @@ These findings describe patterns in submitted complaints; they should not be int
 - [Monthly trend and three-month moving average](sql/05_business_analysis.sql) — business question 7.
 - [January 2025 spike breakdown](sql/05_business_analysis.sql) — business question 9.
 - [Data cleaning and validation notes](docs/data_quality_methodology.md) — explains how to rerun the checks and interpret their results.
+- [Cleaning regression tests](tests/test_combine_clean_cfpb.py) — covers missing/invalid sent dates, invalid received dates, duplicate IDs, and output schema.
 
 For the January 2025 change, the comparison from 14,524 complaints in December 2024 to 31,564 in January 2025 is approximately a 117.3% increase. This is a descriptive month-to-month change, not proof of a specific cause. The product/issue breakdown helps identify where the increase appears; additional investigation would be needed to establish why.
 
