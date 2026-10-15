@@ -49,6 +49,24 @@ The committed JSON is a record of a prior run. It is not proof that a future ref
 6. Run `sql/05_business_analysis.sql` and compare the outputs with the key findings and the processed dashboard summaries.
 7. For a dashboard check, run `python -m streamlit run app.py` after installing `requirements.txt`.
 
+## Recorded baseline from the committed report
+
+The currently committed `data_quality_report.json` records these results for its prior run:
+
+| Check | Recorded value |
+|---|---:|
+| Rows written | 490,639 |
+| Unique complaint IDs | 490,639 |
+| Duplicate rows removed | 0 |
+| Invalid rows skipped | 0 |
+| Earliest received date | 2023-01-01 |
+| Latest received date | 2025-12-31 |
+| 2023 rows | 107,392 |
+| 2024 rows | 163,608 |
+| 2025 rows | 219,639 |
+
+Use these as comparison values only when reproducing the same source extracts and filtering rules. If the source data or cleaning logic changes, investigate and document any differences rather than forcing the output to match these numbers.
+
 ## What to inspect in the validation output
 
 - **Row counts:** compare loaded rows with the JSON report's `rows_written`.
